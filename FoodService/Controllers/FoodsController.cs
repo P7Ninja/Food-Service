@@ -19,10 +19,10 @@ namespace InventoryService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Food>>> GetFoods()
         {
-          if (_context.Foods == null)
-          {
-              return NotFound();
-          }
+            if (_context.Foods == null)
+            {
+                return NotFound();
+            }
             return await _context.Foods.ToListAsync();
         }
 
@@ -30,10 +30,10 @@ namespace InventoryService.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Food>> GetFood(int id)
         {
-          if (_context.Foods == null)
-          {
-              return NotFound();
-          }
+            if (_context.Foods == null)
+            {
+                return NotFound();
+            }
             var food = await _context.Foods.FindAsync(id);
 
             if (food == null)
@@ -80,10 +80,14 @@ namespace InventoryService.Controllers
         [HttpPost]
         public async Task<ActionResult<Food>> PostFood(Food food)
         {
-          if (_context.Foods == null)
-          {
-              return Problem("Entity set 'InventoryServiceContext.Foods'  is null.");
-          }
+            if (food.Price < 0)
+            {
+                return BadRequest("Price cannot be negative.");
+            }
+            if (_context.Foods == null)
+            {
+                return Problem("Entity set 'InventoryServiceContext.Foods'  is null.");
+            }
             _context.Foods.Add(food);
             await _context.SaveChangesAsync();
 

@@ -33,6 +33,18 @@ namespace InventoryService.Controllers
             return await _context.Inventories.Include(i => i.Items).ToListAsync();
         }
 
+        // GET: api/Inventories/user/5
+        // Gets all inventories for a specific user
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<IEnumerable<Inventory>>> GetInventories(int userId)
+        {
+            if (_context.Inventories == null)
+            {
+                return NotFound();
+            }
+            return await _context.Inventories.Include(i => i.Items).ThenInclude(i => i.Food).Where(i => i.UserId == userId).ToListAsync();
+        }
+
         // GET: api/Inventories/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Inventory>> GetInventory(int id)
@@ -41,7 +53,7 @@ namespace InventoryService.Controllers
           {
               return NotFound();
           }
-            var inventory = await _context.Inventories.Include(i => i.Items).Where(i => i.Id == id).FirstOrDefaultAsync();
+            var inventory = await _context.Inventories.Include(i => i.Items).ThenInclude(i => i.Food).FirstOrDefaultAsync(i => i.Id == id);
 
             if (inventory == null)
             {
@@ -52,7 +64,7 @@ namespace InventoryService.Controllers
         }
 
         // PUT: api/Inventories/5
-        // Can only update already existing inventoryItems. Does not delete or add new!!
+        // Can only update already existing inventoryItems. Does not delete or add new items to the inventory!!
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutInventory(int id, Inventory inventory)
@@ -141,7 +153,7 @@ namespace InventoryService.Controllers
             {
                 return NotFound();
             }
-            var inventory = await _context.Inventories.Include(i => i.Items).FirstAsync(i => i.Id == id);
+            var inventory = await _context.Inventories.Include(i => i.Items).FirstOrDefaultAsync(i => i.Id == id);
             if (inventory == null)
             {
                 return NotFound();

@@ -4,6 +4,7 @@ using InventoryService.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FoodService.Migrations
 {
     [DbContext(typeof(InventoryServiceContext))]
-    partial class InventoryServiceContextModelSnapshot : ModelSnapshot
+    [Migration("20231005211044_Ini2")]
+    partial class Ini2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,12 +33,6 @@ namespace FoodService.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<float?>("Cal")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("Carbs")
-                        .HasColumnType("real");
-
                     b.Property<string>("Category")
                         .HasColumnType("nvarchar(max)");
 
@@ -45,17 +42,14 @@ namespace FoodService.Migrations
                     b.Property<float>("Discount")
                         .HasColumnType("real");
 
-                    b.Property<float?>("Fat")
-                        .HasColumnType("real");
+                    b.Property<int?>("MacroID")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<float>("Price")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("Protein")
                         .HasColumnType("real");
 
                     b.Property<string>("SubCategory")
