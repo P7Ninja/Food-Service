@@ -1,35 +1,34 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace InventoryService
+namespace FoodService;
+
+public class Inventory
 {
-    public class Inventory
+    public Inventory(int userID, string name)
     {
-        public Inventory(int userID, string name)
-        {
-            Id = userID;
-            Items = new List<InventoryItem>();
-            Name = name;
-        }
-        public Inventory(int userID)
-        {
-            Id = userID;
-            Items = new List<InventoryItem>();
-            Name = "Inventory";
-        }
-
-        public Inventory()
-        {
-            Id = 0;
-            UserId = 0;
-            Name = "Inventory";
-            Items = new List<InventoryItem>();
-        }
-
-        
-        public int Id { get; set; }
-        public int UserId { get; set; }
-        public string Name { get; set; }
-        public List<InventoryItem> Items {  get; set; }
+        Id = userID;
+        Items = new List<InventoryItem>();
+        Name = name;
     }
+    public Inventory(int userID)
+    {
+        Id = userID;
+        Items = new List<InventoryItem>();
+        Name = "Inventory";
+    }
+
+    public Inventory()
+    {
+        Id = 0;
+        UserId = 0;
+        Name = "Inventory";
+        Items = new List<InventoryItem>();
+    }
+
+
+    public int Id { get; set; }
+    public int UserId { get; set; }
+    public string Name { get; set; }
+    public List<InventoryItem> Items { get; set; }
 }

@@ -1,12 +1,25 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using InventoryService.Data;
+using System.Reflection;
+using FoodService.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<InventoryServiceContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("InventoryServiceContext") ?? throw new InvalidOperationException("Connection string 'InventoryServiceContext' not found.")));
 
 // Add services to the container.
+builder.Services.AddDbContext<InventoryServiceContext>(options =>
+    options.UseSqlite(
+        builder.Configuration.GetConnectionString("FoodServiceContext") 
+        ?? throw new InvalidOperationException("Connection string 'FoodServiceContext' not found.")));
+
+// allows browsers to access the api. Can be deleted later when api gateway is set up
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "All",
+        policy =>
+        {
+            policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+        });
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -24,8 +37,24 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// allows browsers to access the api. Can be deleted later when api gateway is set up
+app.UseCors("All");
+
 app.UseAuthorization();
 
 app.MapControllers();
+
+// update/create database
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var context = services.GetRequiredService<InventoryServiceContext>();
+    if (context.Database.GetPendingMigrations().Any())
+    {
+        context.Database.Migrate();
+        Console.WriteLine("Updated db");
+    }
+}
 
 app.Run();

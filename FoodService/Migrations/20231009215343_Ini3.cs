@@ -5,24 +5,25 @@
 namespace FoodService.Migrations
 {
     /// <inheritdoc />
-    public partial class Ini4 : Migration
+    public partial class Ini3 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<float>(
-                name: "Cal",
-                table: "Foods",
-                type: "real",
-                nullable: true);
+            migrationBuilder.DropColumn(
+                name: "SearchName",
+                table: "Foods");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "Cal",
-                table: "Foods");
+            migrationBuilder.AddColumn<string>(
+                name: "SearchName",
+                table: "Foods",
+                type: "TEXT",
+                nullable: false,
+                defaultValue: "");
         }
     }
 }
