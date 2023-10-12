@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-
-namespace FoodService;
+﻿namespace FoodService;
 
 public class Inventory
 {
