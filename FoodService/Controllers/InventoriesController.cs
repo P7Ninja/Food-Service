@@ -160,6 +160,7 @@ public class InventoriesController : ControllerBase
         }
 
         _context.Inventories.Remove(inventory);
+        _context.InventoryItems.RemoveRange(inventory.Items);
         await _context.SaveChangesAsync();
 
         return NoContent();

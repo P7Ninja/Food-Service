@@ -5,8 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<FoodServiceContext>(options =>
-    options.UseSqlite(
-        builder.Configuration.GetConnectionString("FoodServiceContext")
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("FoodServiceContextSQLServer") 
         ?? throw new InvalidOperationException("Connection string 'FoodServiceContext' not found.")));
 
 // allows browsers to access the api. Can be deleted later when api gateway is set up
