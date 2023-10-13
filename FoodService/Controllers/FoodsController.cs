@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FoodService.Data;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using FoodService.Data;
 
 namespace FoodService.Controllers;
 
@@ -8,9 +8,9 @@ namespace FoodService.Controllers;
 [ApiController]
 public class FoodsController : ControllerBase
 {
-    private readonly InventoryServiceContext _context;
+    private readonly FoodServiceContext _context;
 
-    public FoodsController(InventoryServiceContext context)
+    public FoodsController(FoodServiceContext context)
     {
         _context = context;
     }
@@ -30,7 +30,7 @@ public class FoodsController : ControllerBase
         }
 
         return Ok(await _context.Foods
-            .Where(f =>f.Name.ToUpper().Contains(query.ToUpper()))
+            .Where(f => f.Name.ToUpper().Contains(query.ToUpper()))
             .Take(20)
             .ToListAsync());
     }
@@ -105,7 +105,7 @@ public class FoodsController : ControllerBase
 
     // DELETE: api/Foods/5
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteFood(int id)
+    public async Task<ActionResult> DeleteFood(int id)
     {
         if (_context.Foods == null)
         {

@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using FoodService.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata;
-using FoodService.Data;
-using NuGet.ContentModel;
-using NuGet.Protocol.Core.Types;
 
 namespace FoodService.Controllers;
 
@@ -16,9 +8,9 @@ namespace FoodService.Controllers;
 [ApiController]
 public class InventoriesController : ControllerBase
 {
-    private readonly InventoryServiceContext _context;
+    private readonly FoodServiceContext _context;
 
-    public InventoriesController(InventoryServiceContext context)
+    public InventoriesController(FoodServiceContext context)
     {
         _context = context;
     }
@@ -31,7 +23,7 @@ public class InventoriesController : ControllerBase
         {
             return NotFound();
         }
-        return await _context.Inventories.Include(i => i.Items).ToListAsync();
+        return Ok(await _context.Inventories.Include(i => i.Items).ToListAsync());
     }
 
     // GET: api/Inventories/user/5
@@ -43,10 +35,10 @@ public class InventoriesController : ControllerBase
         {
             return NotFound();
         }
-        return await _context.Inventories
+        return Ok(await _context.Inventories
             .Include(i => i.Items.OrderBy(i => i.ExpirationDate))
             .ThenInclude(i => i.Food)
-            .Where(i => i.UserId == userId).ToListAsync();
+            .Where(i => i.UserId == userId).ToListAsync());
     }
 
     // GET: api/Inventories/5
@@ -67,11 +59,11 @@ public class InventoriesController : ControllerBase
             return NotFound();
         }
 
-        return inventory;
+        return Ok(inventory);
     }
 
     // PUT: api/Inventories/5
-    // Can only update already existing inventoryItems. Does not delete or add new items to the inventory!!
+    // Can only update name, userid and already existing inventoryItems. Does not delete or add new items to the inventory!!
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
     public async Task<IActionResult> PutInventory(int id, Inventory inventory)

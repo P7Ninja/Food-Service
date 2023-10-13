@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FoodService.Migrations
 {
-    [DbContext(typeof(InventoryServiceContext))]
+    [DbContext(typeof(FoodServiceContext))]
     [Migration("20231009160139_Ini")]
     partial class Ini
     {
