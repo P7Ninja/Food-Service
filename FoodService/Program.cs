@@ -42,17 +42,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// update/create database
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-
-    var context = services.GetRequiredService<FoodServiceContext>();
-    if (context.Database.GetPendingMigrations().Any())
-    {
-        context.Database.Migrate();
-        Console.WriteLine("Updated db");
-    }
-}
-
 app.Run();
