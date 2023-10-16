@@ -19,7 +19,7 @@ public class FoodControllerTests
         connection.Open();
         var optionsBuilder = new DbContextOptionsBuilder<FoodServiceContext>().UseSqlite(connection);
         var context = new FoodServiceContext(optionsBuilder.Options);
-        context.Database.Migrate();
+        context.Database.EnsureCreated();
         controller = new FoodsController(context);
         food = new Food(id: 0, name: "Tomat", price: 5, discount: 0);
     }

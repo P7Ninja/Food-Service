@@ -19,7 +19,7 @@ public class InventoriesControllerTests
         connection.Open();
         var optionsBuilder = new DbContextOptionsBuilder<FoodServiceContext>().UseSqlite(connection);
         var context = new FoodServiceContext(optionsBuilder.Options);
-        context.Database.Migrate();
+        context.Database.EnsureCreated();
         controller = new InventoriesController(context);
         inv = new Inventory(0, "Test inventory");
     }
