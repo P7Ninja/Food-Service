@@ -19,9 +19,9 @@ public class FoodControllerTests
         connection.Open();
         var optionsBuilder = new DbContextOptionsBuilder<FoodServiceContext>().UseSqlite(connection);
         var context = new FoodServiceContext(optionsBuilder.Options);
-        context.Database.Migrate();
+        context.Database.EnsureCreated();
         controller = new FoodsController(context);
-        food = new Food(id: 0, name: "Tomat", price: 5, discount: 0);
+        food = new Food();
     }
 
     [Test]
@@ -66,8 +66,12 @@ public class FoodControllerTests
     [Test]
     public async Task GetWithQuerySuccess()
     {
-        await controller.PostFood(new Food(id: 0, name: "Tomat", price: 5, discount: 0));
-        await controller.PostFood(new Food(id: 0, name: "Æble", price: 5, discount: 0));
+        Food food1 = new Food();
+        food1.Name = "Tomat";
+        Food food2 = new Food();
+        food2.Name = "Æble";
+        await controller.PostFood(food);
+        await controller.PostFood(food);
         var response = await controller.GetFoods("Æbl");
 
         Assert.IsInstanceOf<OkObjectResult>(response.Result);
@@ -80,8 +84,12 @@ public class FoodControllerTests
     [Test]
     public async Task GetWithQueryNoMatch()
     {
-        await controller.PostFood(new Food(id: 0, name: "Tomat", price: 5, discount: 0));
-        await controller.PostFood(new Food(id: 0, name: "Æble", price: 5, discount: 0));
+        Food food1 = new Food();
+        food1.Name = "Tomat";
+        Food food2 = new Food();
+        food2.Name = "Æble";
+        await controller.PostFood(food1);
+        await controller.PostFood(food2);
         var response = await controller.GetFoods("This should not return anything");
 
         Assert.IsInstanceOf<OkObjectResult>(response.Result);
