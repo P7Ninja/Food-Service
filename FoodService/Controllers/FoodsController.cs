@@ -35,6 +35,20 @@ public class FoodsController : ControllerBase
             .ToListAsync());
     }
 
+    // POST: api/Foods/list
+    [HttpPost("list")]
+    public async Task<ActionResult<IEnumerable<Food>>> GetFoodList(List<int> ids)
+    {
+        if (_context.Foods == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(await _context.Foods
+            .Where(f => ids.Contains(f.Id))
+            .ToListAsync());
+    }
+
 
     // GET: api/Foods/5
     [HttpGet("{id}")]
