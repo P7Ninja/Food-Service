@@ -34,13 +34,7 @@ public class FoodsController : ControllerBase
             .Take(20)
             .ToListAsync());
     }
-    //Returns food objects
-    [HttpGet("N")]
-    public async Task<IEnumerable<Food>> GetFoods2()
-    {
 
-        return await _context.Foods.ToListAsync(); ;
-    }
 
     // GET: api/Foods/5
     [HttpGet("{id}")]
@@ -113,25 +107,8 @@ public class FoodsController : ControllerBase
     [HttpPost("N")]
     public async Task<ActionResult<IEnumerable<Food>>> PostFoods(List<Food> foods)
     {
-        if (foods.Count > 0)
-        {
-            foreach (var food in foods)
-            {
-                if (food.Price < 0)
-                {
-                    return BadRequest("Price cannot be negative.");
-                }
-                if (_context.Foods == null)
-                {
-                    return Problem("Entity set 'InventoryServiceContext.Foods'  is null.");
-                }
-                _context.Foods.Add(food);
-                await _context.SaveChangesAsync();
-
-                //return CreatedAtAction("GetFood", new { id = food.Id }, food);
-            }
-        }
-
+        _context.Foods.AddRange(foods);
+        await _context.SaveChangesAsync();
         return Ok(foods);
     }
 
@@ -154,24 +131,18 @@ public class FoodsController : ControllerBase
 
         return NoContent();
     }
-    //Delete all the items in foods
-    [HttpDelete("N")]
+    // Delete all the items in foods
+    // DELETE: api/foods
+    [HttpDelete]
     public async Task<ActionResult> DeleteFoods()
     {
         if (_context.Foods == null)
         {
             return NotFound();
         }
-        var food = await GetFoods2();
-        if (food == null)
-        {
-            return NotFound();
-        }
-        foreach (var item in food)
-        {
-            _context.Foods.Remove(item);
-            await _context.SaveChangesAsync();
-        }
+
+        _context.Foods.RemoveRange(_context.Foods);
+        await _context.SaveChangesAsync();
 
         return NoContent();
     }

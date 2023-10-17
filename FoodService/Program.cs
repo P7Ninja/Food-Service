@@ -1,5 +1,6 @@
 using FoodService.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,7 +40,12 @@ app.UseHttpsRedirection();
 app.UseCors("All");
 
 app.UseAuthorization();
-
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<FoodServiceContext>();
+    await db.Database.EnsureCreatedAsync();
+}
 
 app.Run();
