@@ -112,7 +112,7 @@ public class FoodsController : ControllerBase
         {
             return Problem("Entity set 'InventoryServiceContext.Foods'  is null.");
         }
-        _context.Foods.Add(food);
+        await _context.Foods.AddAsync(food);
         await _context.SaveChangesAsync();
 
         return CreatedAtAction("GetFood", new { id = food.Id }, food);
@@ -121,7 +121,7 @@ public class FoodsController : ControllerBase
     [HttpPost("N")]
     public async Task<ActionResult<IEnumerable<Food>>> PostFoods(List<Food> foods)
     {
-        _context.Foods.AddRange(foods);
+        await _context.Foods.AddRangeAsync(foods);
         await _context.SaveChangesAsync();
         return Ok(foods);
     }
