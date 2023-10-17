@@ -23,17 +23,19 @@ var foods = new List<Food>();
 
 foreach (var item in jsonFoods)
 {
-    var f = new Food();
-    f.Name = item.Name;
-    f.Vendor = item.Ref.Name;
-    f.Price = item.UnitPrice;
-    f.PriceKg = item.PriceKg;
-    f.Cal = item.Macro.Calories;
-    f.Fat = item.Macro.Fat;
-    f.Protein = item.Macro.Protein;
-    f.Carbs = item.Macro.Carbohydrates;
-    f.Discount = 0;
-    f.Category = "";
+    var f = new Food
+    {
+        Name = item.Name,
+        Vendor = item.Ref.Name,
+        Price = item.UnitPrice,
+        PriceKg = item.PriceKg,
+        Cal = item.Macro.Calories,
+        Fat = item.Macro.Fat,
+        Protein = item.Macro.Protein,
+        Carbs = item.Macro.Carbohydrates,
+        Discount = 0,
+        Category = ""
+    };
     foreach (var cat in item.Categories) {
         f.Category += " " + cat;
     }
