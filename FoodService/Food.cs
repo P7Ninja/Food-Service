@@ -2,7 +2,7 @@
 
 public class Food
 {
-    public Food(int id, string name, string description, float price, float discount, string vendor, string category, string subCategory, int macroID)
+    public Food(int id, string name, float price, float discount, string vendor, string category)
     {
         Id = id;
         Name = name;
@@ -10,7 +10,6 @@ public class Food
         Discount = discount;
         Vendor = vendor;
         Category = category;
-        SubCategory = subCategory;
     }
 
     public Food()
@@ -21,7 +20,6 @@ public class Food
         Discount = 0;
         Vendor = "Vendor";
         Category = "Category";
-        SubCategory = "SubCategory";
         Fat = 0;
         Carbs = 0;
         Protein = 0;
@@ -35,7 +33,6 @@ public class Food
     public float Discount { get; set; }
     public string Vendor { get; set; }
     public string Category { get; set; }
-    public string SubCategory { get; set; }
     public float Fat { get; set; }
     public float Carbs { get; set; }
     public float Protein { get; set; }
