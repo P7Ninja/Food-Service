@@ -8,7 +8,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using TheConverter;
 
-var fileName = "C://Users//Andre//Downloads//scrape-20231002T071003Z-001//scrape//data//fotex//ingredients.json";
+var fileName = "C://Users//Andre//Downloads//scrape-20231002T071003Z-001//scrape//data//ingredients.json";
 
 var jsonString = File.ReadAllText(fileName);
 
@@ -17,7 +17,7 @@ var options = new JsonSerializerOptions
     PropertyNameCaseInsensitive = true
 };
 
-var jsonFoods = System.Text.Json.JsonSerializer.Deserialize<List<JsonFoodFøtex>>(jsonString, options);
+var jsonFoods = System.Text.Json.JsonSerializer.Deserialize<List<JsonFood>>(jsonString, options);
 
 var foods = new List<Food>();
 
@@ -34,10 +34,21 @@ foreach (var item in jsonFoods)
         Protein = item.Macro.Protein,
         Carbs = item.Macro.Carbohydrates,
         Discount = 0,
-        Category = ""
+        Category = string.Empty
     };
-    foreach (var cat in item.Categories) {
-        f.Category += " " + cat;
+    if (item.Categories.ValueKind is JsonValueKind.String)
+    {
+        f.Category = item.Categories.ToString();
+    }
+    else
+    {
+        var arr = item.Categories.EnumerateArray();
+        foreach (var cat in arr)
+        {
+            f.Category += cat.GetString() + ", ";
+        }
+        f.Category = f.Category.Trim();
+        f.Category = f.Category.Trim(',');
     }
     foods.Add(f);
 }

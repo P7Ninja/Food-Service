@@ -5,7 +5,7 @@ using Microsoft.Extensions.Hosting;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<FoodServiceContext>(options =>
+builder.Services.AddDbContextPool<FoodServiceContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("FoodServiceContextSQLServer") 
         ?? throw new InvalidOperationException("Connection string 'FoodServiceContext' not found.")));
