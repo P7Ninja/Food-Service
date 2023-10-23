@@ -8,7 +8,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using TheConverter;
 
-var fileName = "C://Users//Andre//Downloads//scrape-20231002T071003Z-001//scrape//data//ingredients.json";
+var fileName = args[0];
 
 var jsonString = File.ReadAllText(fileName);
 
