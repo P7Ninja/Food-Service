@@ -66,12 +66,16 @@ public class FoodControllerTests
     [Test]
     public async Task GetWithQuerySuccess()
     {
-        Food food1 = new Food();
-        food1.Name = "Tomat";
-        Food food2 = new Food();
-        food2.Name = "Æble";
-        await controller.PostFood(food);
-        await controller.PostFood(food);
+        Food food1 = new()
+        {
+            Name = "Tomat"
+        };
+        Food food2 = new()
+        {
+            Name = "Æble"
+        };
+        await controller.PostFood(food1);
+        await controller.PostFood(food2);
         var response = await controller.GetFoods("Æbl");
 
         Assert.IsInstanceOf<OkObjectResult>(response.Result);

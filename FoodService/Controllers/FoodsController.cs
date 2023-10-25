@@ -1,5 +1,6 @@
 ﻿using FoodService.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
 
 namespace FoodService.Controllers;
@@ -18,6 +19,7 @@ public class FoodsController : ControllerBase
     // GET: api/Foods
     // GET: api/Foods?query=x
     [HttpGet]
+    [OutputCache]
     public async Task<ActionResult<IEnumerable<Food>>> GetFoods(string? query = null)
     {
         if (_context.Foods == null)
@@ -30,7 +32,10 @@ public class FoodsController : ControllerBase
         }
 
         return Ok(await _context.Foods
-            .Where(f => f.Name.ToUpper().Contains(query.ToUpper()))
+            .Where(f => f.Name.StartsWith(query))
+            .OrderBy(f => f.Name.Length)
+            .GroupBy(f => f.Name)
+            .Select(f => f.FirstOrDefault())
             .Take(20)
             .ToListAsync());
     }
