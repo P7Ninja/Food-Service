@@ -73,6 +73,7 @@ public class FoodsController : ControllerBase
                         Price = (float)clearance.Offer.OriginalPrice,
                         Name = clearance.Product.Description,
                         Vendor = item.Store.Name,
+                        Category = clearance.Product.Categories.Da,
                         Cal = 0,
                         Carbs = 0,
                         Fat = 0,
