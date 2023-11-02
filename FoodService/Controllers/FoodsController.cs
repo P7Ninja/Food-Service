@@ -2,6 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Versioning;
+using System.Net;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 
 namespace FoodService.Controllers;
 
@@ -38,6 +43,53 @@ public class FoodsController : ControllerBase
             .Select(f => f.FirstOrDefault())
             .Take(20)
             .ToListAsync());
+    }
+
+    // GET: api/Foods/Discounted
+    [HttpGet("Discounted")]
+    [OutputCache]
+    public async Task<ActionResult<IEnumerable<Food>>> GetDiscountedFoods(string zipcode)
+    {
+        var foodWasteUrl = $"https://api.sallinggroup.com/v1/food-waste?zip={zipcode}";
+        var client = new HttpClient();
+        client.DefaultRequestHeaders.Add("Authorization", "Bearer dc83c623-d474-4c50-bc27-4a7791042539");
+        var response = await client.GetAsync(foodWasteUrl);
+        var str = await response.Content.ReadAsStringAsync();
+
+        var json = JsonSerializer.Deserialize<List<Root>>(str, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        var foodList = new List<Food>();
+        var i = (await _context.Foods.AsNoTracking().OrderBy(f => f.Id).LastAsync()).Id + 1;
+        foreach (var item in json)
+        {
+            foreach (var clearance in item.Clearances)
+            {
+                try
+                {
+                    var food = new Food()
+                    {
+                        Id = i,
+                        Discount = (float)clearance.Offer.Discount,
+                        Price = (float)clearance.Offer.OriginalPrice,
+                        Name = clearance.Product.Description,
+                        Vendor = item.Store.Name,
+                        Cal = 0,
+                        Carbs = 0,
+                        Fat = 0,
+                        Protein = 0,
+                    };
+
+                    i++;
+                    foodList.Add(food);
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
+            }
+        }
+
+        return Ok(foodList);
     }
 
     // POST: api/Foods/list
@@ -122,8 +174,10 @@ public class FoodsController : ControllerBase
 
         return CreatedAtAction("GetFood", new { id = food.Id }, food);
     }
-    //Post a list of foods at once
-    [HttpPost("N")]
+
+    // Post a list of foods at once
+    // POST api/AddList
+    [HttpPost("AddList")]
     public async Task<ActionResult<IEnumerable<Food>>> PostFoods(List<Food> foods)
     {
         await _context.Foods.AddRangeAsync(foods);
