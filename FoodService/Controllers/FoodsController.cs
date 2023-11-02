@@ -59,7 +59,7 @@ public class FoodsController : ControllerBase
         var json = JsonSerializer.Deserialize<List<Root>>(str, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         var foodList = new List<Food>();
-        var i = (await _context.Foods.AsNoTracking().OrderBy(f => f.Id).LastAsync()).Id + 1;
+        var i = 0;
         foreach (var item in json)
         {
             foreach (var clearance in item.Clearances)
