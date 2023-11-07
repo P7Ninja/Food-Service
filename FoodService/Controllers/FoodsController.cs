@@ -24,7 +24,6 @@ public class FoodsController : ControllerBase
     // GET: api/Foods
     // GET: api/Foods?query=x
     [HttpGet]
-    [OutputCache]
     public async Task<ActionResult<IEnumerable<Food>>> GetFoods(string? query = null)
     {
         if (_context.Foods == null)
@@ -58,7 +57,7 @@ public class FoodsController : ControllerBase
 
         var json = JsonSerializer.Deserialize<List<Root>>(str, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-        var foodList = new List<Food>();
+        var discounts = new List<DiscountDTO>();
         var i = 0;
         foreach (var item in json)
         {
@@ -66,7 +65,7 @@ public class FoodsController : ControllerBase
             {
                 try
                 {
-                    var food = new Food()
+                    var food = new DiscountDTO()
                     {
                         Id = i,
                         Discount = (float)clearance.Offer.Discount,
@@ -74,14 +73,10 @@ public class FoodsController : ControllerBase
                         Name = clearance.Product.Description,
                         Vendor = item.Store.Name,
                         Category = clearance.Product.Categories.Da,
-                        Cal = 0,
-                        Carbs = 0,
-                        Fat = 0,
-                        Protein = 0,
                     };
 
                     i++;
-                    foodList.Add(food);
+                    discounts.Add(food);
                 }
                 catch (Exception)
                 {
@@ -90,7 +85,7 @@ public class FoodsController : ControllerBase
             }
         }
 
-        return Ok(foodList);
+        return Ok(discounts);
     }
 
     // POST: api/Foods/list
