@@ -2,10 +2,8 @@
 
 using FoodService;
 using Newtonsoft.Json;
-using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using TheConverter;
 
 var fileName = "C://Users//Andre//Downloads//scrape-20231002T071003Z-001//scrape//data//ingredients.json";

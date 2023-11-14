@@ -37,8 +37,8 @@ public class FoodsController : ControllerBase
 
         return Ok(await _context.Foods
             .Where(f => f.Name.StartsWith(query))
-            .OrderBy(f => f.Name.Length)
             .GroupBy(f => f.Name)
+            .OrderBy(f => f.Min(n => n.Name.Length))
             .Select(f => f.FirstOrDefault())
             .Take(20)
             .ToListAsync());
