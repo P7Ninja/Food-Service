@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 var serverVersion = new MySqlServerVersion(new Version(8, 0, 35));
 builder.Services.AddDbContextPool<FoodServiceContext>(options =>
 {
-    options.UseMySql(builder.Configuration.GetConnectionString("FoodServiceMySqlDb"), serverVersion);
+    options.UseMySql(Environment.GetEnvironmentVariable("DB_CONN") ?? builder.Configuration.GetConnectionString("FoodServiceDb"), serverVersion);
 });
 
 // allows browsers to access the api. Can be deleted later when api gateway is set up
