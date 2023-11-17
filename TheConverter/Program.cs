@@ -51,13 +51,18 @@ foreach (var item in jsonFoods)
     foods.Add(f);
 }
 
+
 var client = new HttpClient();
 string json = JsonConvert.SerializeObject(foods);
 var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-var httpResponse = await client.PostAsync("https://localhost:7088/api/foods/n", httpContent);
+var httpResponse = await client.PostAsync("https://localhost:7088/api/foods/addlist", httpContent);
 
 if (httpResponse.IsSuccessStatusCode)
 {
     Console.WriteLine("yesyes");
     Console.ReadKey();
+}
+else
+{
+    Console.WriteLine(httpResponse.ToString());
 }

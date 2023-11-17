@@ -2,7 +2,6 @@
 using FoodService.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -17,9 +16,7 @@ namespace FoodService.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.11")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
-
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("FoodService.Food", b =>
                 {
@@ -27,40 +24,38 @@ namespace FoodService.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
                     b.Property<float>("Cal")
-                        .HasColumnType("real");
+                        .HasColumnType("float");
 
                     b.Property<float>("Carbs")
-                        .HasColumnType("real");
+                        .HasColumnType("float");
 
                     b.Property<string>("Category")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<float>("Discount")
-                        .HasColumnType("real");
+                        .HasColumnType("float");
 
                     b.Property<float>("Fat")
-                        .HasColumnType("real");
+                        .HasColumnType("float");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<float>("Price")
-                        .HasColumnType("real");
+                        .HasColumnType("float");
 
                     b.Property<float>("PriceKg")
-                        .HasColumnType("real");
+                        .HasColumnType("float");
 
                     b.Property<float>("Protein")
-                        .HasColumnType("real");
+                        .HasColumnType("float");
 
                     b.Property<string>("Vendor")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
