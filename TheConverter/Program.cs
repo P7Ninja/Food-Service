@@ -2,10 +2,8 @@
 
 using FoodService;
 using Newtonsoft.Json;
-using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using TheConverter;
 
 var fileName = "C://Users//Andre//Downloads//scrape-20231002T071003Z-001//scrape//data//ingredients.json";
@@ -53,13 +51,18 @@ foreach (var item in jsonFoods)
     foods.Add(f);
 }
 
+
 var client = new HttpClient();
 string json = JsonConvert.SerializeObject(foods);
 var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-var httpResponse = await client.PostAsync("https://localhost:7088/api/foods/n", httpContent);
+var httpResponse = await client.PostAsync("https://localhost:7088/api/foods/addlist", httpContent);
 
 if (httpResponse.IsSuccessStatusCode)
 {
     Console.WriteLine("yesyes");
     Console.ReadKey();
+}
+else
+{
+    Console.WriteLine(httpResponse.ToString());
 }

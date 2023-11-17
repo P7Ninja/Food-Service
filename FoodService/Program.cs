@@ -1,15 +1,15 @@
 using FoodService.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+var serverVersion = new MySqlServerVersion(new Version(8, 0, 35));
 builder.Services.AddDbContextPool<FoodServiceContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("FoodServiceDb") 
-        ?? throw new InvalidOperationException("Connection string 'FoodServiceDb' not found")));
+{
+    options.UseMySql(builder.Configuration.GetConnectionString("FoodServiceMySqlDb"), serverVersion);
+});
 
 // allows browsers to access the api. Can be deleted later when api gateway is set up
 builder.Services.AddCors(options =>
